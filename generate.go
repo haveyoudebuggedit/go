@@ -1,12 +1,12 @@
 package main
 
 import (
-    "encoding/json"
-    "fmt"
-    "html/template"
-    "io/ioutil"
-    "os"
-    "path/filepath"
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 var templateText = `<!DOCTYPE html>
@@ -33,50 +33,50 @@ var indexFileContents = `<!DOCTYPE html>
 
 type config map[string]string
 type entry struct {
-    Name string
-    URL  string
+	Name string
+	URL  string
 }
 
 func main() {
-    ghPagesDir := "gh-pages"
-    if err := os.MkdirAll(ghPagesDir, 0755); err != nil {
-        panic(fmt.Errorf("failed to create dir %s (%w)", ghPagesDir, err))
-    }
+	ghPagesDir := "gh-pages"
+	if err := os.MkdirAll(ghPagesDir, 0755); err != nil {
+		panic(fmt.Errorf("failed to create dir %s (%w)", ghPagesDir, err))
+	}
 
-    cnameFile := filepath.Join(ghPagesDir, "CNAME")
-    if err := ioutil.WriteFile(cnameFile, []byte("go.debugged.it"), 0644); err != nil {
-        panic(fmt.Errorf("failed to write CNAME file %s (%w)", cnameFile, err))
-    }
+	cnameFile := filepath.Join(ghPagesDir, "CNAME")
+	if err := ioutil.WriteFile(cnameFile, []byte("go.debugged.it"), 0644); err != nil {
+		panic(fmt.Errorf("failed to write CNAME file %s (%w)", cnameFile, err))
+	}
 
-    indexFile := filepath.Join(ghPagesDir, "index.html")
-    if err := ioutil.WriteFile(indexFile, []byte(indexFileContents), 0644); err != nil {
-        panic(fmt.Errorf("failed to write index file %s (%w)", indexFile, err))
-    }
+	indexFile := filepath.Join(ghPagesDir, "index.html")
+	if err := ioutil.WriteFile(indexFile, []byte(indexFileContents), 0644); err != nil {
+		panic(fmt.Errorf("failed to write index file %s (%w)", indexFile, err))
+	}
 
-    data, err := ioutil.ReadFile("packages.json")
-    if err != nil {
-        panic(fmt.Errorf("failed open %s (%w)", "packages.json", err))
-    }
-    cfg := &config{}
-    if err := json.Unmarshal(data, cfg); err != nil {
-        panic(fmt.Errorf("failed load %s (%w)", "packages.json", err))
-    }
-    tpl := template.Must(template.New("html").Parse(templateText))
-    for name, url := range *cfg {
-        e := entry{
-            name, url,
-        }
-        dir := filepath.Join(ghPagesDir, name)
-        if err := os.MkdirAll(dir, 0755); err != nil {
-            panic(fmt.Errorf("failed to create dir %s (%w)", dir, err))
-        }
-        file := filepath.Join(ghPagesDir, name, "index.html")
-        fh, err := os.Create(file)
-        if err != nil {
-            panic(fmt.Errorf("failed to open %s (%w)", file, err))
-        }
-        if err := tpl.Execute(fh, e); err != nil {
-            panic(fmt.Errorf("failed to render template (%w)", err))
-        }
-    }
+	data, err := ioutil.ReadFile("packages.json")
+	if err != nil {
+		panic(fmt.Errorf("failed open %s (%w)", "packages.json", err))
+	}
+	cfg := &config{}
+	if err := json.Unmarshal(data, cfg); err != nil {
+		panic(fmt.Errorf("failed load %s (%w)", "packages.json", err))
+	}
+	tpl := template.Must(template.New("html").Parse(templateText))
+	for name, url := range *cfg {
+		e := entry{
+			name, url,
+		}
+		dir := filepath.Join(ghPagesDir, name)
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			panic(fmt.Errorf("failed to create dir %s (%w)", dir, err))
+		}
+		file := filepath.Join(ghPagesDir, name, "index.html")
+		fh, err := os.Create(file)
+		if err != nil {
+			panic(fmt.Errorf("failed to open %s (%w)", file, err))
+		}
+		if err := tpl.Execute(fh, e); err != nil {
+			panic(fmt.Errorf("failed to render template (%w)", err))
+		}
+	}
 }
