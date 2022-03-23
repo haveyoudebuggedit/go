@@ -24,6 +24,13 @@ var templateText = `<!DOCTYPE html>
 </head></html>
 `
 
+var indexFileContents = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="refresh" content="0; url=https://github.com/haveyoudebuggedit">
+</head></html>
+`
+
 type config map[string]string
 type entry struct {
     Name string
@@ -40,6 +47,12 @@ func main() {
     if err := ioutil.WriteFile(cnameFile, []byte("go.debugged.it"), 0644); err != nil {
         panic(fmt.Errorf("failed to write CNAME file %s (%w)", cnameFile, err))
     }
+
+    indexFile := filepath.Join(ghPagesDir, "index.html")
+    if err := ioutil.WriteFile(indexFile, []byte(indexFileContents), 0644); err != nil {
+        panic(fmt.Errorf("failed to write index file %s (%w)", indexFile, err))
+    }
+
     data, err := ioutil.ReadFile("packages.json")
     if err != nil {
         panic(fmt.Errorf("failed open %s (%w)", "packages.json", err))
