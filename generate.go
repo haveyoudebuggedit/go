@@ -31,6 +31,15 @@ type entry struct {
 }
 
 func main() {
+    ghPagesDir := "gh-pages"
+    if err := os.MkdirAll(ghPagesDir, 0755); err != nil {
+        panic(fmt.Errorf("failed to create dir %s (%w)", ghPagesDir, err))
+    }
+
+    cnameFile := filepath.Join(ghPagesDir, "CNAME")
+    if err := ioutil.WriteFile(cnameFile, []byte("go.debugged.it"), 0644); err != nil {
+        panic(fmt.Errorf("failed to write CNAME file %s (%w)", cnameFile, err))
+    }
     data, err := ioutil.ReadFile("packages.json")
     if err != nil {
         panic(fmt.Errorf("failed open %s (%w)", "packages.json", err))
@@ -44,11 +53,11 @@ func main() {
         e := entry{
             name, url,
         }
-        dir := filepath.Join("gh-pages", name)
+        dir := filepath.Join(ghPagesDir, name)
         if err := os.MkdirAll(dir, 0755); err != nil {
             panic(fmt.Errorf("failed to create dir %s (%w)", dir, err))
         }
-        file := filepath.Join("gh-pages", name, "index.html")
+        file := filepath.Join(ghPagesDir, name, "index.html")
         fh, err := os.Create(file)
         if err != nil {
             panic(fmt.Errorf("failed to open %s (%w)", file, err))
