@@ -24,6 +24,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    concurrency:
+      group: "gh-pages-deploy"
+      cancel-in-progress: false
     needs:
       - build
     if: github.ref == 'refs/heads/main'
