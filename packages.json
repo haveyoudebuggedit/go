@@ -1,3 +1,4 @@
 {
-  "validation": "https://github.com/haveyoudebuggedit/go-validation"
+  "validation": "https://github.com/haveyoudebuggedit/go-validation",
+  "psr7": "https://github.com/haveyoudebuggedit/go-psr7"
 }
