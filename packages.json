@@ -1,4 +1,5 @@
 {
   "validation": "https://github.com/haveyoudebuggedit/go-validation",
-  "gsr7": "https://github.com/haveyoudebuggedit/gsr7"
+  "gsr7": "https://github.com/haveyoudebuggedit/gsr7",
+  "hubcheck": "https://github.com/haveyoudebuggedit/hubcheck",
 }
